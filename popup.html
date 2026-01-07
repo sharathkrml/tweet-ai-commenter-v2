@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tweet AI Commenter</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <div class="popup-container">
+      <header class="popup-header">
+        <h1>✨ Tweet AI Commenter</h1>
+        <div class="toggle-container">
+          <label class="toggle">
+            <input type="checkbox" id="enableToggle" checked />
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </header>
+
+      <div class="status-bar" id="statusBar">
+        <span class="status-dot"></span>
+        <span class="status-text">Checking connection...</span>
+      </div>
+
+      <div class="settings-section">
+
+        <div class="setting-group">
+          <label for="styleSelect">Comment Style</label>
+          <select id="styleSelect">
+            <option value="witty">😏 Witty</option>
+            <option value="professional">👔 Professional</option>
+            <option value="supportive">💪 Supportive</option>
+            <option value="humorous">😂 Humorous</option>
+            <option value="sarcastic">🙄 Sarcastic</option>
+            <option value="thoughtful">🤔 Thoughtful</option>
+          </select>
+        </div>
+      </div>
+
+      <footer class="popup-footer">
+        <a href="options.html" target="_blank" class="options-link"
+          >⚙️ Advanced Settings</a
+        >
+      </footer>
+    </div>
+
+    <script src="popup.js"></script>
+  </body>
+</html>

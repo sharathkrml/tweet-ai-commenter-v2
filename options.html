@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tweet AI Commenter - Settings</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          sans-serif;
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        color: #fff;
+        min-height: 100vh;
+        padding: 40px;
+      }
+
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      h1 {
+        font-size: 28px;
+        margin-bottom: 8px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .subtitle {
+        color: rgba(255, 255, 255, 0.6);
+        margin-bottom: 32px;
+      }
+
+      .card {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
+        padding: 24px;
+        margin-bottom: 24px;
+      }
+
+      .card h2 {
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 16px;
+        color: rgba(255, 255, 255, 0.9);
+      }
+
+      .form-group {
+        margin-bottom: 16px;
+      }
+
+      .form-group:last-child {
+        margin-bottom: 0;
+      }
+
+      label {
+        display: block;
+        font-size: 13px;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.6);
+        margin-bottom: 6px;
+      }
+
+      input[type="text"],
+      input[type="url"] {
+        width: 100%;
+        padding: 12px 16px;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        color: #fff;
+        font-size: 14px;
+        transition: all 0.2s;
+      }
+
+      input:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+      }
+
+      .hint {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.4);
+        margin-top: 6px;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 24px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        border-radius: 10px;
+        color: #fff;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+      }
+
+      .btn-secondary {
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      .btn-secondary:hover {
+        background: rgba(255, 255, 255, 0.15);
+      }
+
+      .actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 24px;
+      }
+
+      .success-message {
+        display: none;
+        padding: 12px 16px;
+        background: rgba(76, 175, 80, 0.2);
+        border: 1px solid rgba(76, 175, 80, 0.3);
+        border-radius: 10px;
+        color: #4caf50;
+        margin-top: 16px;
+      }
+
+      .success-message.show {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>✨ Tweet AI Commenter</h1>
+      <p class="subtitle">Advanced Settings</p>
+
+      <div class="card">
+        <h2>API Configuration</h2>
+        <div class="form-group">
+          <label for="apiEndpoint">Generic API Endpoint (Ollama/Local)</label>
+          <input
+            type="url"
+            id="apiEndpoint"
+            placeholder="http://0.0.0.0:8000"
+          />
+          <p class="hint">Default: http://0.0.0.0:8000</p>
+        </div>
+        <div class="form-group" style="margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;">
+          <label for="openrouterApiKey">OpenRouter API Key (Overrides Generic API)</label>
+          <input
+            type="password"
+            id="openrouterApiKey"
+            placeholder="sk-or-v1-..."
+            style="width: 100%; padding: 12px 16px; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; color: #fff; font-size: 14px;"
+          />
+          <p class="hint">Get your key from <a href="https://openrouter.ai/keys" target="_blank" style="color: #667eea;">openrouter.ai</a></p>
+        </div>
+        <div class="form-group">
+          <label for="openrouterModel">OpenRouter Model</label>
+          <input
+            type="text"
+            id="openrouterModel"
+            placeholder="meta-llama/llama-3.1-8b-instruct:free"
+          />
+          <p class="hint">Default: meta-llama/llama-3.1-8b-instruct:free</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Custom Prompt (Optional)</h2>
+        <div class="form-group">
+          <label for="customPrompt">Custom System Prompt</label>
+          <textarea
+            id="customPrompt"
+            rows="4"
+            style="
+              width: 100%;
+              padding: 12px 16px;
+              background: rgba(255, 255, 255, 0.08);
+              border: 1px solid rgba(255, 255, 255, 0.1);
+              border-radius: 10px;
+              color: #fff;
+              font-size: 14px;
+              resize: vertical;
+            "
+            placeholder="Leave empty to use default prompts based on comment style..."
+          ></textarea>
+          <p class="hint">
+            Override the default prompt for generating comments
+          </p>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn" id="saveBtn">💾 Save Settings</button>
+        <button class="btn btn-secondary" id="resetBtn">
+          🔄 Reset to Defaults
+        </button>
+      </div>
+
+      <div class="success-message" id="successMessage">
+        ✅ Settings saved successfully!
+      </div>
+    </div>
+
+    <script src="options.js"></script>
+  </body>
+</html>

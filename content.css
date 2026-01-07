@@ -1,0 +1,695 @@
+/* Tweet AI Commenter - Apple-Level Design System */
+
+/* AI Comment Button */
+.tweet-ai-comment-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 9999px;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  color: rgb(113, 118, 123);
+  margin-left: 4px;
+  position: relative;
+  overflow: hidden;
+}
+
+.tweet-ai-comment-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(29, 155, 240, 0);
+  border-radius: 9999px;
+  transition: background 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tweet-ai-comment-btn:hover::before {
+  background: rgba(29, 155, 240, 0.1);
+}
+
+.tweet-ai-comment-btn:hover {
+  color: rgb(29, 155, 240);
+  transform: scale(1.05);
+}
+
+.tweet-ai-comment-btn:active {
+  transform: scale(0.95);
+}
+
+.tweet-ai-btn-inner {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  position: relative;
+  z-index: 1;
+}
+
+.tweet-ai-btn-text {
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+
+/* Sidebar Container - Slide-out from Right */
+.tweet-ai-sidebar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 450px;
+  height: 100vh;
+  background: rgba(22, 24, 28, 0.85);
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  z-index: 10000;
+  box-shadow: 
+    -20px 0 60px rgba(0, 0, 0, 0.5),
+    1px 0 0 rgba(255, 255, 255, 0.05) inset;
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+.tweet-ai-sidebar.open {
+  transform: translateX(0);
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Sidebar Header */
+.tweet-ai-sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 28px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.02) 0%,
+    transparent 100%
+  );
+  flex-shrink: 0;
+}
+
+.tweet-ai-sidebar-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, #ffffff 0%, rgba(255, 255, 255, 0.8) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.tweet-ai-modal-close {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 28px;
+  cursor: pointer;
+  padding: 4px;
+  line-height: 1;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  font-weight: 300;
+}
+
+.tweet-ai-modal-close:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
+  transform: scale(1.1);
+}
+
+.tweet-ai-modal-close:active {
+  transform: scale(0.95);
+}
+
+/* Sidebar Body */
+.tweet-ai-sidebar-body {
+  padding: 28px;
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: 0;
+}
+
+.tweet-ai-sidebar-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.tweet-ai-sidebar-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.tweet-ai-sidebar-body::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+.tweet-ai-sidebar-body::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* Loading State */
+.tweet-ai-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 48px 24px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.tweet-ai-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(29, 155, 240, 0.15);
+  border-top-color: rgb(29, 155, 240);
+  border-radius: 50%;
+  animation: spin 0.8s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  position: relative;
+}
+
+.tweet-ai-spinner::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border: 3px solid transparent;
+  border-top-color: rgba(29, 155, 240, 0.3);
+  border-radius: 50%;
+  animation: spin 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite reverse;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.tweet-ai-loading span {
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Result State */
+.tweet-ai-result {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Results Container (Multiple Comments) */
+.tweet-ai-results {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.tweet-ai-results-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 8px;
+  padding-bottom: 4px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) rgba(255, 255, 255, 0.05);
+  -webkit-overflow-scrolling: touch;
+  max-height: 100%;
+}
+
+.tweet-ai-results-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.tweet-ai-results-list::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+}
+
+.tweet-ai-results-list::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+
+.tweet-ai-results-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Comment Card */
+.tweet-ai-comment-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 20px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: visible;
+  flex-shrink: 0;
+  min-height: fit-content;
+}
+
+.tweet-ai-comment-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(29, 155, 240, 0.05) 0%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.tweet-ai-comment-card:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.12);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.tweet-ai-comment-card:hover::before {
+  opacity: 1;
+}
+
+.tweet-ai-comment-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.tweet-ai-comment-style {
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  letter-spacing: -0.01em;
+}
+
+.tweet-ai-comment-textarea {
+  width: 100%;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 15px;
+  line-height: 1.6;
+  margin-bottom: 16px;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
+  letter-spacing: -0.01em;
+  resize: none;
+  overflow: hidden;
+  transition: all 0.2s ease;
+  outline: none;
+  user-select: text !important;
+  pointer-events: auto !important;
+}
+
+.tweet-ai-comment-textarea:focus {
+  background: rgba(0, 0, 0, 0.3);
+  border-color: rgba(29, 155, 240, 0.3);
+  box-shadow: 0 0 0 1px rgba(29, 155, 240, 0.2);
+}
+
+.tweet-ai-comment-copy {
+  width: 100%;
+  padding: 12px 16px;
+  background: rgba(29, 155, 240, 0.1);
+  color: rgb(29, 155, 240);
+  border: 1px solid rgba(29, 155, 240, 0.2);
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  letter-spacing: -0.01em;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+}
+
+.tweet-ai-comment-copy:hover {
+  background: rgba(29, 155, 240, 0.15);
+  border-color: rgba(29, 155, 240, 0.3);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(29, 155, 240, 0.2);
+}
+
+.tweet-ai-comment-copy:active {
+  transform: translateY(0);
+}
+
+.tweet-ai-comment-text {
+  width: 100%;
+  min-height: 120px;
+  max-height: 300px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  color: #ffffff;
+  font-size: 16px;
+  line-height: 1.6;
+  resize: vertical;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
+  letter-spacing: -0.01em;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
+}
+
+.tweet-ai-comment-text::-webkit-scrollbar {
+  width: 6px;
+}
+
+.tweet-ai-comment-text::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.tweet-ai-comment-text::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+.tweet-ai-comment-text:focus {
+  outline: none;
+  border-color: rgba(29, 155, 240, 0.5);
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 
+    0 0 0 4px rgba(29, 155, 240, 0.1),
+    0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.tweet-ai-actions {
+  display: flex;
+  gap: 12px;
+  flex-shrink: 0;
+  margin-top: auto;
+  padding-top: 8px;
+}
+
+.tweet-ai-copy-btn,
+.tweet-ai-regenerate-btn {
+  flex: 1;
+  padding: 14px 24px;
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  letter-spacing: -0.01em;
+  position: relative;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
+}
+
+.tweet-ai-copy-btn {
+  background: linear-gradient(135deg, rgb(29, 155, 240) 0%, rgb(26, 140, 216) 100%);
+  color: #ffffff;
+  box-shadow: 
+    0 4px 12px rgba(29, 155, 240, 0.3),
+    0 0 0 0.5px rgba(255, 255, 255, 0.1) inset;
+}
+
+.tweet-ai-copy-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.tweet-ai-copy-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 
+    0 6px 16px rgba(29, 155, 240, 0.4),
+    0 0 0 0.5px rgba(255, 255, 255, 0.15) inset;
+}
+
+.tweet-ai-copy-btn:hover::before {
+  opacity: 1;
+}
+
+.tweet-ai-copy-btn:active {
+  transform: translateY(0);
+  box-shadow: 
+    0 2px 8px rgba(29, 155, 240, 0.3),
+    0 0 0 0.5px rgba(255, 255, 255, 0.1) inset;
+}
+
+.tweet-ai-regenerate-btn {
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.tweet-ai-regenerate-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.1);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.tweet-ai-regenerate-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.18);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.tweet-ai-regenerate-btn:hover::before {
+  opacity: 1;
+}
+
+.tweet-ai-regenerate-btn:active {
+  transform: translateY(0);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* Error State */
+.tweet-ai-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 32px 24px;
+  text-align: center;
+}
+
+.tweet-ai-error-text {
+  color: rgba(255, 59, 48, 0.9);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1.5;
+}
+
+.tweet-ai-retry-btn {
+  padding: 14px 28px;
+  background: rgba(255, 59, 48, 0.1);
+  color: rgba(255, 59, 48, 0.9);
+  border: 1px solid rgba(255, 59, 48, 0.2);
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  letter-spacing: -0.01em;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
+}
+
+.tweet-ai-retry-btn:hover {
+  background: rgba(255, 59, 48, 0.15);
+  border-color: rgba(255, 59, 48, 0.3);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(255, 59, 48, 0.2);
+}
+
+.tweet-ai-retry-btn:active {
+  transform: translateY(0);
+}
+
+/* Light mode support - Apple-inspired light theme */
+@media (prefers-color-scheme: light) {
+  .tweet-ai-modal {
+    background: rgba(0, 0, 0, 0.3);
+  }
+
+  .tweet-ai-modal-content {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(40px) saturate(180%);
+    -webkit-backdrop-filter: blur(40px) saturate(180%);
+    box-shadow: 
+      0 20px 60px rgba(0, 0, 0, 0.15),
+      0 0 0 0.5px rgba(0, 0, 0, 0.05) inset,
+      0 1px 0 rgba(255, 255, 255, 0.8) inset;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
+  .tweet-ai-modal-header {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.02) 0%,
+      transparent 100%
+    );
+  }
+
+  .tweet-ai-modal-title {
+    background: linear-gradient(135deg, #000000 0%, rgba(0, 0, 0, 0.8) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .tweet-ai-modal-close {
+    color: rgba(0, 0, 0, 0.5);
+  }
+
+  .tweet-ai-modal-close:hover {
+    color: #000000;
+    background: rgba(0, 0, 0, 0.08);
+  }
+
+  .tweet-ai-loading span {
+    color: rgba(0, 0, 0, 0.7);
+  }
+
+  .tweet-ai-comment-text {
+    background: rgba(0, 0, 0, 0.02);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    color: #000000;
+  }
+
+  .tweet-ai-comment-text:focus {
+    border-color: rgba(29, 155, 240, 0.5);
+    background: rgba(0, 0, 0, 0.03);
+    box-shadow: 
+      0 0 0 4px rgba(29, 155, 240, 0.1),
+      0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .tweet-ai-comment-card {
+    background: rgba(0, 0, 0, 0.02);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
+  .tweet-ai-comment-card:hover {
+    background: rgba(0, 0, 0, 0.03);
+    border-color: rgba(0, 0, 0, 0.12);
+  }
+
+  .tweet-ai-comment-style {
+    color: rgba(0, 0, 0, 0.9);
+  }
+
+  .tweet-ai-comment-content {
+    color: rgba(0, 0, 0, 0.85);
+    background: rgba(0, 0, 0, 0.02);
+  }
+
+  .tweet-ai-comment-copy {
+    background: rgba(29, 155, 240, 0.1);
+    color: rgb(29, 155, 240);
+    border: 1px solid rgba(29, 155, 240, 0.2);
+  }
+
+  .tweet-ai-comment-copy:hover {
+    background: rgba(29, 155, 240, 0.15);
+    border-color: rgba(29, 155, 240, 0.3);
+  }
+
+  .tweet-ai-regenerate-btn {
+    background: rgba(0, 0, 0, 0.03);
+    color: rgba(0, 0, 0, 0.9);
+    border: 1px solid rgba(0, 0, 0, 0.12);
+  }
+
+  .tweet-ai-regenerate-btn:hover {
+    background: rgba(0, 0, 0, 0.05);
+    border-color: rgba(0, 0, 0, 0.18);
+  }
+
+  .tweet-ai-error-text {
+    color: rgba(255, 59, 48, 0.9);
+  }
+
+  .tweet-ai-retry-btn {
+    background: rgba(255, 59, 48, 0.1);
+    color: rgba(255, 59, 48, 0.9);
+    border: 1px solid rgba(255, 59, 48, 0.2);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .tweet-ai-modal-content {
+    max-width: calc(100vw - 40px);
+    width: calc(100vw - 40px);
+    height: 80vh;
+    max-height: 80vh;
+    border-radius: 20px;
+  }
+
+  .tweet-ai-modal-header {
+    padding: 20px 24px 16px;
+  }
+
+  .tweet-ai-modal-body {
+    padding: 20px;
+  }
+
+  .tweet-ai-comment-card {
+    padding: 16px;
+  }
+
+  .tweet-ai-comment-content {
+    padding: 12px;
+    font-size: 14px;
+  }
+
+  .tweet-ai-actions {
+    flex-direction: column;
+  }
+
+  .tweet-ai-copy-btn,
+  .tweet-ai-regenerate-btn {
+    width: 100%;
+  }
+}
