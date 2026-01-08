@@ -4,44 +4,42 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tweet AI Commenter</title>
+    <link rel="stylesheet" href="common.css" />
     <link rel="stylesheet" href="popup.css" />
   </head>
   <body>
-    <div class="popup-container">
-      <header class="popup-header">
-        <h1>✨ Tweet AI Commenter</h1>
-        <div class="toggle-container">
-          <label class="toggle">
+    <div class="app-container">
+      <header class="header">
+        <div class="logo-area">
+          <div class="logo-icon">✨</div>
+          <h1>Tweet AI</h1>
+        </div>
+        
+        <div class="toggle-wrapper">
+          <label class="toggle-switch">
             <input type="checkbox" id="enableToggle" checked />
-            <span class="toggle-slider"></span>
+            <span class="slider"></span>
           </label>
         </div>
       </header>
 
-      <div class="status-bar" id="statusBar">
-        <span class="status-dot"></span>
-        <span class="status-text">Checking connection...</span>
-      </div>
-
-      <div class="settings-section">
-
-        <div class="setting-group">
-          <label for="styleSelect">Comment Style</label>
-          <select id="styleSelect">
-            <option value="witty">😏 Witty</option>
-            <option value="professional">👔 Professional</option>
-            <option value="supportive">💪 Supportive</option>
-            <option value="humorous">😂 Humorous</option>
-            <option value="sarcastic">🙄 Sarcastic</option>
-            <option value="thoughtful">🤔 Thoughtful</option>
-          </select>
+      <main class="main-content">
+        <div class="status-card" id="statusBar">
+          <div class="status-indicator">
+            <span class="status-pulse"></span>
+            <span class="status-dot"></span>
+          </div>
+          <p class="status-message">Checking connection...</p>
         </div>
-      </div>
 
-      <footer class="popup-footer">
-        <a href="options.html" target="_blank" class="options-link"
-          >⚙️ Advanced Settings</a
-        >
+        <!-- Future Extensibility: Stats or Quick Actions could go here -->
+      </main>
+
+      <footer class="footer">
+        <a href="options.html" target="_blank" class="settings-btn">
+          <span class="icon">⚙️</span>
+          <span>Settings</span>
+        </a>
       </footer>
     </div>
 

@@ -1,4 +1,5 @@
 // Options page script
+import { SYSTEM_PROMPT } from "./prompts.js"
 
 document.addEventListener("DOMContentLoaded", async () => {
   const openrouterApiKey = document.getElementById("openrouterApiKey")
@@ -13,7 +14,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     apiEndpoint: "http://0.0.0.0:8000",
     openrouterApiKey: "",
     openrouterModel: "meta-llama/llama-3.1-8b-instruct:free",
-    customPrompt: "",
+    customPrompt: SYSTEM_PROMPT,
   })
 
   apiEndpoint.value = settings.apiEndpoint
@@ -27,7 +28,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       apiEndpoint: apiEndpoint.value || "http://0.0.0.0:8000",
       openrouterApiKey: openrouterApiKey.value,
       openrouterModel: openrouterModel.value || "meta-llama/llama-3.1-8b-instruct:free",
-      customPrompt: customPrompt.value,
+      customPrompt: customPrompt.value || SYSTEM_PROMPT,
     })
 
     successMessage.classList.add("show")
@@ -41,15 +42,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     apiEndpoint.value = "http://0.0.0.0:8000"
     openrouterApiKey.value = ""
     openrouterModel.value = "meta-llama/llama-3.1-8b-instruct:free"
-    customPrompt.value = ""
+    customPrompt.value = SYSTEM_PROMPT
 
     await chrome.storage.sync.set({
       apiEndpoint: "http://0.0.0.0:8000",
       openrouterApiKey: "",
       openrouterModel: "meta-llama/llama-3.1-8b-instruct:free",
-      customPrompt: "",
-      commentStyle: "witty",
-      enabled: true,
+      customPrompt: SYSTEM_PROMPT,
     })
 
     successMessage.textContent = "✅ Settings reset to defaults!"

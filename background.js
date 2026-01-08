@@ -9,7 +9,6 @@ const DEFAULT_SETTINGS = {
   apiEndpoint: "http://0.0.0.0:8000",
   openrouterApiKey: "",
   openrouterModel: "meta-llama/llama-3.1-8b-instruct:free",
-  commentStyle: "witty",
   enabled: true,
 }
 
@@ -56,8 +55,8 @@ async function callOpenRouter(prompt, settings) {
 }
 
 // Generate comment using Generic API or OpenRouter
-async function generateComment(tweetText, settings, style = null) {
-  const commentStyle = style || settings.commentStyle
+async function generateComment(tweetText, settings, style = "witty") {
+  const commentStyle = style
   console.log(
     "[Tweet AI Background] Generating comment for tweet:",
     tweetText.substring(0, 50) + "..."
