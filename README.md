@@ -2,7 +2,7 @@
 
 An AI-powered Chrome extension that generates thoughtful, witty, and engaging replies for Twitter/X. Stop staring at a blank reply box and let AI give you a head start with multiple personas.
 
-![Tweet AI Demo](https://via.placeholder.com/800x450.png?text=Tweet+AI+Commenter+Demo) <!-- Replace with actual demo image/gif if available -->
+[![Tweet AI Demo](https://img.youtube.com/vi/G_NKRd9xBo8/maxresdefault.jpg)](https://youtu.be/G_NKRd9xBo8)
 
 ## 🚀 Key Features
 
